@@ -1,10 +1,30 @@
+"use client";
+import { useState } from "react";
+
 export default function Home() {
+const [method,setMethod] = useState("GET");
+const [url,setUrl] = useState("");
+const [data,setData] = useState("");
+const callApi = async () => {
+  try{
+    const response = await fetch(url,{method});
+    const data = await response.text();
+    console.log(data);
+    setData(data);
+  }
+  catch(err){
+    console.error(err);
+  }
+}
+  
+
+
   return (
     <main className="min-h-screen bg-gray-100 p-8">
       <div className="mx-auto max-w-7xl rounded-xl bg-white shadow-lg">
         {/* Header */}
         <div className="border-b p-6">
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold text-blue-600 ">
             API Tester
           </h1>
           <p className="mt-2 text-gray-500">
@@ -15,7 +35,7 @@ export default function Home() {
         <div className="p-6">
           {/* Request Bar */}
           <div className="flex gap-4">
-            <select className="w-40 rounded-lg border border-gray-300 bg-white px-4 py-3 font-semibold outline-none focus:border-blue-500">
+            <select className="w-40 rounded-lg border border-gray-300 bg-white px-4 py-3 font-semibold outline-none focus:border-blue-500" value={method} onChange={(e) => setMethod(e.target.value)}>
               <option>GET</option>
               <option>POST</option>
               <option>PUT</option>
@@ -27,9 +47,11 @@ export default function Home() {
               type="text"
               placeholder="Enter API URL..."
               className="flex-1 rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-blue-500"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
             />
 
-            <button className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700">
+            <button className="rounded-lg bg-blue-600 px-8 py-3 font-semibold text-white transition hover:bg-blue-700" onClick={callApi}>
               Send
             </button>
           </div>
@@ -73,7 +95,7 @@ export default function Home() {
           <div className="mt-8 rounded-lg border bg-gray-900 p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-semibold text-white">
-                Response
+                Response Structure:
               </h2>
 
               <span className="rounded bg-green-600 px-3 py-1 text-sm text-white">
@@ -82,13 +104,15 @@ export default function Home() {
             </div>
 
             <pre className="overflow-auto rounded bg-black p-4 text-green-400">
-{`{
-  "message": "Response will appear here"
-}`}
+              {data ? data : "No response yet from alan"}
             </pre>
           </div>
+
+          
         </div>
+     
       </div>
     </main>
   );
 }
+
